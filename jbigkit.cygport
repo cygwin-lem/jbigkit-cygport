@@ -1,6 +1,6 @@
 NAME="jbigkit"
 VERSION=2.0
-RELEASE=12
+RELEASE=13
 CATEGORY="Graphics"
 SUMMARY="JBIG1 codec"
 DESCRIPTION="JBIG-KIT is a software implementation of the JBIG1 data compression
