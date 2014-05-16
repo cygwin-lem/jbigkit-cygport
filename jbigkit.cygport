@@ -22,7 +22,9 @@ PATCH_URI="
 PKG_NAMES="${NAME} libjbig2 libjbig-devel"
 jbigkit_SUMMARY="Converts JBIG1 to/from PBM format"
 jbigkit_CONTENTS="usr/bin/*.exe usr/share/doc/ usr/share/man/"
+libjbig2_CATEGORY="Libs"
 libjbig2_CONTENTS="usr/bin/cygjbig-2.dll"
+libjbig_devel_CATEGORY="Libs"
 libjbig_devel_CONTENTS="usr/include/ usr/lib/"
 
 src_compile() {
