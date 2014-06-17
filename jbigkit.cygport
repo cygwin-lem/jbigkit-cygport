@@ -1,6 +1,6 @@
 NAME="jbigkit"
 VERSION=2.0
-RELEASE=13
+RELEASE=14
 CATEGORY="Graphics"
 SUMMARY="JBIG1 codec"
 DESCRIPTION="JBIG-KIT is a software implementation of the JBIG1 data compression
@@ -17,20 +17,21 @@ PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/jbigkit.git/plain/jbigkit-2.0-warnings.patch
 	http://pkgs.fedoraproject.org/cgit/jbigkit.git/plain/jbigkit-CVE-2013-6369.patch
 	2.0-build.patch
+	2.0-parallel-make.patch
 "
 
 PKG_NAMES="${NAME} libjbig2 libjbig-devel"
 jbigkit_SUMMARY="Converts JBIG1 to/from PBM format"
 jbigkit_CONTENTS="usr/bin/*.exe usr/share/doc/ usr/share/man/"
 libjbig2_CATEGORY="Libs"
-libjbig2_CONTENTS="usr/bin/cygjbig-2.dll"
+libjbig2_CONTENTS="usr/bin/cygjbig*-2.dll"
 libjbig_devel_CATEGORY="Libs"
 libjbig_devel_CONTENTS="usr/include/ usr/lib/"
 
 src_compile() {
 	lndirs
 	cd ${B}
-	cygmake CC=${CC} CFLAGS="${CFLAGS} -I${B}/libjbig" AR=${AR} RANLIB=${RANLIB}
+	cygmake CC=${CC} CCFLAGS="${CFLAGS}" AR=${AR} RANLIB=${RANLIB}
 }
 
 src_test() {
@@ -41,8 +42,8 @@ src_test() {
 
 src_install() {
 	cd ${B}
-	dobin libjbig/cygjbig-2.dll pbmtools/{jbgtopbm,pbmtojbg}.exe
-	dolib libjbig/libjbig{,85,.dll}.a
+	dobin libjbig/cygjbig{,85}-2.dll pbmtools/{jbgtopbm,pbmtojbg}.exe
+	dolib libjbig/libjbig{,85}.dll.a
 	doinclude libjbig/jbig{,85,_ar}.h
 	doman pbmtools/*.1
 }

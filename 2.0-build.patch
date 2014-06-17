@@ -11,11 +11,11 @@
  CFLAGS = -g -O -Wall -ansi -pedantic # --coverage
  
 -all: libjbig.a tstcodec tstcodec85
-+all: cygjbig-2.dll libjbig.a tstcodec tstcodec85
++all: cygjbig-2.dll cygjbig85-2.dll libjbig.a libjbig85.a tstcodec tstcodec85
  
  tstcodec: tstcodec.o jbig.o jbig_ar.o
  	$(CC) $(CFLAGS) -o tstcodec $+
-@@ -15,15 +17,18 @@ tstcodec: tstcodec.o jbig.o jbig_ar.o
+@@ -15,15 +17,21 @@ tstcodec: tstcodec.o jbig.o jbig_ar.o
  tstcodec85: tstcodec85.o jbig85.o jbig_ar.o
  	$(CC) $(CFLAGS) -o tstcodec85 $+
  
@@ -28,6 +28,9 @@
 -	-ranlib libjbig.a
 +	$(AR) rc libjbig.a jbig.o jbig_ar.o
 +	-$(RANLIB) libjbig.a
++
++cygjbig85-2.dll: jbig85.o jbig_ar.o
++	$(CC) -shared -Wl,--out-implib,libjbig85.dll.a -o $@ $^
  
  libjbig85.a: jbig85.o jbig_ar.o
  	rm -f libjbig85.a
