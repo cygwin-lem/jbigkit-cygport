@@ -1,0 +1,69 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Markus Kuhn <Markus.Kuhn@cl.cam.ac.uk>
+Date: Thu, 1 May 2014 14:48:33 +0100
+Subject: [PATCH] added test for linking with both jbig.c and jbig85.c
+ simultaneously
+
+
+diff --git a/libjbig/Makefile b/libjbig/Makefile
+index 5c7151a..10362bc 100644
+--- a/libjbig/Makefile
++++ b/libjbig/Makefile
+@@ -6,7 +6,7 @@ CC = gcc
+ # Options for the compiler: A high optimization level is suggested
+ CFLAGS = -g -O -W -Wall -ansi -pedantic # --coverage
+ 
+-all: libjbig.a libjbig85.a tstcodec tstcodec85
++all: libjbig.a libjbig85.a tstcodec tstcodec85 tstjoint
+ 
+ tstcodec: tstcodec.o jbig.o jbig_ar.o
+ 	$(CC) $(LDFLAGS) $(CFLAGS) -o tstcodec tstcodec.o jbig.o jbig_ar.o
+@@ -14,6 +14,10 @@ tstcodec: tstcodec.o jbig.o jbig_ar.o
+ tstcodec85: tstcodec85.o jbig85.o jbig_ar.o
+ 	$(CC) $(LDFLAGS) $(CFLAGS) -o tstcodec85 tstcodec85.o jbig85.o jbig_ar.o
+ 
++tstjoint: tstjoint.o jbig.o jbig85.o jbig_ar.o
++	$(CC) $(LDFLAGS) $(CFLAGS) -o tstjoint \
++	  tstjoint.o jbig.o jbig85.o jbig_ar.o
++
+ libjbig.a: jbig.o jbig_ar.o
+ 	rm -f libjbig.a
+ 	ar rc libjbig.a jbig.o jbig_ar.o
+@@ -42,9 +46,10 @@ update-po: jbig.c jbig85.c Makefile
+ analyze:
+ 	clang --analyze *.c
+ 
+-test: tstcodec tstcodec85
++test: tstcodec tstcodec85 tstjoint
+ 	./tstcodec
+ 	./tstcodec85
++	./tstjoint
+ 
+ t82test.pbm: tstcodec
+ 	./tstcodec $@
+@@ -52,4 +57,4 @@ t82test.pbm: tstcodec
+ clean:
+ 	rm -f *.o *.gcda *.gcno *.gcov *.plist *~ core gmon.out dbg_d\=??.pbm
+ 	rm -f t82test.pbm
+-	rm -f tstcodec tstcodec85
++	rm -f tstcodec tstcodec85 tstjoint
+diff --git a/libjbig/tstjoint.c b/libjbig/tstjoint.c
+new file mode 100644
+index 0000000..511d294
+--- /dev/null
++++ b/libjbig/tstjoint.c
+@@ -0,0 +1,14 @@
++/*
++ *  This test file exists to check for any compile-time problems
++ *  when linking an application with both jbig.c and jbig85.c simultanenously.
++ *
++ *  Markus Kuhn -- http://www.cl.cam.ac.uk/~mgk25/
++ */
++
++#include "jbig.h"
++#include "jbig85.h"
++
++int main()
++{
++  return 0;
++}

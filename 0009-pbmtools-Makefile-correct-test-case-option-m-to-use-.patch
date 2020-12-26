@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Markus Kuhn <Markus.Kuhn@cl.cam.ac.uk>
+Date: Sat, 20 Dec 2014 09:51:41 +0100
+Subject: [PATCH] pbmtools/Makefile: correct test case option -m to use max.
+ allowed value 127
+
+Reported by Yuriy M. Kaminskiy
+
+diff --git a/pbmtools/Makefile b/pbmtools/Makefile
+index 77f539d..5983517 100644
+--- a/pbmtools/Makefile
++++ b/pbmtools/Makefile
+@@ -60,9 +60,9 @@ test82: pbmtojbg jbgtopbm
+ 	$(MAKE) IMG=sandra    "OPTIONSP=-o 2" OPTIONSJ=       dotest2g
+ 	$(MAKE) IMG=multi      OPTIONSP=      OPTIONSJ=       dotest2g
+ 	$(MAKE) IMG=multi      OPTIONSP=-b    OPTIONSJ=-b     dotest2g
+-	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 128"       dotest1
+-	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 128"       dotest2b
+-	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 128 -p 92" dotest2b
++	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 127"       dotest1
++	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 127"       dotest2b
++	$(MAKE) IMG=mx        "OPTIONSP=-q -s 3 -m 127 -p 92" dotest2b
+ 	$(MAKE) IMG=mx        "OPTIONSP=-q -Y -1"             dotest2b
+ 	$(MAKE) IMG=mx        "OPTIONSP=-Y -1"                dotest2b
+ 	rm -f test-*.jbg test-*.pbm test-*.pgm

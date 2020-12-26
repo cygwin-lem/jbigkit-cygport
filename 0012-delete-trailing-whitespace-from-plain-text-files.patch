@@ -1,0 +1,1563 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Markus Kuhn <Markus.Kuhn@cl.cam.ac.uk>
+Date: Mon, 2 Apr 2018 12:28:09 +0100
+Subject: [PATCH] delete trailing whitespace from plain-text files
+
+
+diff --git a/ANNOUNCE b/ANNOUNCE
+index 15ce550..8d0e2c6 100644
+--- a/ANNOUNCE
++++ b/ANNOUNCE
+@@ -55,7 +55,7 @@ The JBIG compression algorithm offers the following features:
+ 
+   - About 2 times better compression on typical 300 dpi documents
+     compared to 'gzip -9' on raw bitmaps.
+-    
++
+   - About 3-4 times better compression than GIF on typical 300 dpi
+     documents.
+ 
+diff --git a/CHANGES b/CHANGES
+index d616ce6..8e587de 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -11,7 +11,7 @@ untrusted sources should upgrade.
+ 
+   - fixed a buffer-overflow vulnerability in the jbig.c decoder,
+     reported by Florian Weimer (Red Hat): CVE-2013-6369
+-    
++
+   - fixed ability of corrupted input data to force jbig85.c decoder
+     into an end-less loop
+ 
+diff --git a/libjbig/jbig.c b/libjbig/jbig.c
+index 3c76e07..fe54946 100644
+--- a/libjbig/jbig.c
++++ b/libjbig/jbig.c
+@@ -22,7 +22,7 @@
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- * 
++ *
+  *  If you want to use this program under different license conditions,
+  *  then contact the author for an arrangement.
+  */
+@@ -68,7 +68,7 @@
+ 
+ /* object code version id */
+ 
+-const char jbg_version[] = 
++const char jbg_version[] =
+   "JBIG-KIT " JBG_VERSION " -- (c) 1995-2014 Markus Kuhn -- "
+   "Licence: " JBG_LICENCE "\n";
+ 
+@@ -117,7 +117,7 @@ static const char *errmsg[] = {
+  * then simply add the necessary semaphores or mutex primitives below.
+  * In contrast to C's malloc() and realloc(), but like C's calloc(),
+  * these functions take two parameters nmemb and size that are multiplied
+- * before being passed on to the corresponding C function. 
++ * before being passed on to the corresponding C function.
+  * This we can catch all overflows during a size_t multiplication a
+  * a single place.
+  */
+@@ -137,7 +137,7 @@ static void *checked_malloc(size_t nmemb, size_t size)
+   /* assert that nmemb * size <= SIZE_MAX */
+   if (size > SIZE_MAX / nmemb)
+     abort();
+-  
++
+   p = malloc(nmemb * size);
+ 
+   if (!p)
+@@ -163,7 +163,7 @@ static void *checked_realloc(void *ptr, size_t nmemb, size_t size)
+   /* assert that nmemb * size <= SIZE_MAX */
+   if (size > SIZE_MAX / nmemb)
+     abort();
+-  
++
+   p = realloc(ptr, nmemb * size);
+ 
+   if (!p)
+@@ -212,7 +212,7 @@ static void checked_free(void *ptr)
+ static struct jbg_buf *jbg_buf_init(struct jbg_buf **free_list)
+ {
+   struct jbg_buf *new_block;
+-  
++
+   /* Test whether a block from the free list is available */
+   if (*free_list) {
+     new_block = *free_list;
+@@ -238,13 +238,13 @@ static struct jbg_buf *jbg_buf_init(struct jbg_buf **free_list)
+ static void jbg_buf_free(struct jbg_buf **free_list)
+ {
+   struct jbg_buf *tmp;
+-  
++
+   while (*free_list) {
+     tmp = (*free_list)->next;
+     checked_free(*free_list);
+     *free_list = tmp;
+   }
+-  
++
+   return;
+ }
+ 
+@@ -308,7 +308,7 @@ static void jbg_buf_remove_zeros(struct jbg_buf *head)
+    */
+   if (head->last->len && head->last->d[head->last->len - 1] == MARKER_ESC)
+     jbg_buf_write(MARKER_STUFF, head);
+- 
++
+   return;
+ }
+ 
+@@ -324,7 +324,7 @@ static void jbg_buf_prefix(struct jbg_buf *new_prefix, struct jbg_buf **start)
+   new_prefix->last->next->previous = new_prefix->last;
+   new_prefix->last = new_prefix->last->next->last;
+   *start = new_prefix;
+-  
++
+   return;
+ }
+ 
+@@ -341,7 +341,7 @@ static void jbg_buf_output(struct jbg_buf **head,
+ 			void *file)
+ {
+   struct jbg_buf *tmp;
+-  
++
+   while (*head) {
+     data_out((*head)->d, (*head)->len, file);
+     tmp = (*head)->next;
+@@ -349,7 +349,7 @@ static void jbg_buf_output(struct jbg_buf **head,
+     *(*head)->free_list = *head;
+     *head = tmp;
+   }
+-  
++
+   return;
+ }
+ 
+@@ -364,7 +364,7 @@ static void jbg_buf_output(struct jbg_buf **head,
+ unsigned long jbg_ceil_half(unsigned long x, int n)
+ {
+   unsigned long mask;
+-  
++
+   assert(n >= 0 && n < 32);
+   mask = (1UL << n) - 1;     /* the lowest n bits are 1 here */
+   return (x >> n) + ((mask & x) != 0);
+@@ -796,7 +796,7 @@ void jbg_enc_init(struct jbg_enc_state *s, unsigned long x, unsigned long y,
+   s->comment = NULL;
+   s->dppriv = jbg_dptable;
+   s->res_tab = jbg_resred;
+-  
++
+   s->highres = (int *) checked_malloc(planes, sizeof(int));
+   s->lhp[0] = p;
+   s->lhp[1] = (unsigned char **)
+@@ -806,9 +806,9 @@ void jbg_enc_init(struct jbg_enc_state *s, unsigned long x, unsigned long y,
+     s->lhp[1][i] = (unsigned char *)
+       checked_malloc(jbg_ceil_half(y, 1), jbg_ceil_half(x, 1+3));
+   }
+-  
++
+   s->free_list = NULL;
+-  s->s = (struct jbg_arenc_state *) 
++  s->s = (struct jbg_arenc_state *)
+     checked_malloc(s->planes, sizeof(struct jbg_arenc_state));
+   s->tx = (int *) checked_malloc(s->planes, sizeof(int));
+   lx = jbg_ceil_half(x, 1);
+@@ -830,9 +830,9 @@ void jbg_enc_init(struct jbg_enc_state *s, unsigned long x, unsigned long y,
+  * l0 (height of one stripe in the lowest resolution layer) is
+  * selected, which obeys the recommended limitations for l0 in annex A
+  * and C of the JBIG standard. The selected number of resolution layers
+- * is returned. 
++ * is returned.
+  */
+-int jbg_enc_lrlmax(struct jbg_enc_state *s, unsigned long x, 
++int jbg_enc_lrlmax(struct jbg_enc_state *s, unsigned long x,
+ 		   unsigned long y)
+ {
+   for (s->d = 0; s->d < 6; s->d++)
+@@ -957,7 +957,7 @@ static void encode_sde(struct jbg_enc_state *s,
+   hp = s->lhp[s->highres[plane]][plane] + stripe * hl * hbpl;
+   lp2 = s->lhp[1 - s->highres[plane]][plane] + stripe * ll * lbpl;
+   lp1 = lp2 + lbpl;
+-  
++
+   /* check whether we can refer to any state of a previous stripe */
+   reset = (stripe == 0) || (s->options & JBG_SDRST);
+ 
+@@ -1035,7 +1035,7 @@ static void encode_sde(struct jbg_enc_state *s,
+ 	at_determined = 1;
+       }
+       assert(s->tx[plane] >= 0); /* i.e., tx can safely be cast to unsigned */
+-      
++
+       /* typical prediction */
+       if (s->options & JBG_TPBON) {
+ 	ltp = 1;
+@@ -1066,11 +1066,11 @@ static void encode_sde(struct jbg_enc_state *s,
+        *          76543210765432107654321076543210     line_h2
+        *  76543210765432107654321X76543210             line_h1
+        */
+-      
++
+       line_h1 = line_h2 = line_h3 = 0;
+       if (i > 0 || !reset) line_h2 = (long)*(hp - hbpl) << 8;
+       if (i > 1 || !reset) line_h3 = (long)*(hp - hbpl - hbpl) << 8;
+-      
++
+       /* encode line */
+       for (j = 0; j < hx; hp++) {
+ 	line_h1 |= *hp;
+@@ -1177,7 +1177,7 @@ static void encode_sde(struct jbg_enc_state *s,
+     /*
+      *  Encode differential layer
+      */
+-    
++
+     for (i = 0; i < hl && y < hy; i++, y++) {
+ 
+       /* check whether it is worth to perform an ATMOVE */
+@@ -1213,7 +1213,7 @@ static void encode_sde(struct jbg_enc_state *s,
+ 	}
+ 	at_determined = 1;
+       }
+-      
++
+       if ((i >> 1) >= ll - 1 || (y >> 1) >= ly - 1)
+ 	lp1 = lp2;
+ 
+@@ -1299,7 +1299,7 @@ static void encode_sde(struct jbg_enc_state *s,
+        *            76543210 7654321Y 76543210 76543210     line_l2
+        *            76543210 76543210 76543210 76543210     line_l1
+        */
+-      
++
+ 
+       line_h1 = line_h2 = line_h3 = line_l1 = line_l2 = line_l3 = 0;
+       if (i > 0 || !reset) line_h2 = (long)*(hp - hbpl) << 8;
+@@ -1309,7 +1309,7 @@ static void encode_sde(struct jbg_enc_state *s,
+       }
+       line_l2 = (long)*lp2 << 8;
+       line_l1 = (long)*lp1 << 8;
+-      
++
+       /* encode line */
+       for (j = 0; j < hx; lp1++, lp2++) {
+ 	if ((j >> 1) < lbpl * 8 - 8) {
+@@ -1403,8 +1403,8 @@ static void encode_sde(struct jbg_enc_state *s,
+ #endif
+ 			continue;
+ 		      }
+-		    }	
+-		  }	
++		    }
++		  }
+ 		}
+ 
+ 		/* determine context */
+@@ -1437,7 +1437,7 @@ static void encode_sde(struct jbg_enc_state *s,
+ #ifdef DEBUG
+ 		encoded_pixels++;
+ #endif
+-		
++
+ 		/* statistics for adaptive template changes */
+ 		if (!at_determined && j >= s->mx) {
+ 		  c[0] += !(((line_h2 >> 6) ^ line_h1) & 0x100);
+@@ -1445,7 +1445,7 @@ static void encode_sde(struct jbg_enc_state *s,
+ 		    c[t] += !(((line_h1 >> t) ^ line_h1) & 0x100);
+ 		  ++c_all;
+ 		}
+-		
++
+ 	      } while (++j & 1 && j < hx);
+ 	  } while (j & 7 && j < hx);
+ 	  hp++;
+@@ -1457,10 +1457,10 @@ static void encode_sde(struct jbg_enc_state *s,
+ 	lp1 -= lbpl;
+ 	lp2 -= lbpl;
+       }
+-      
++
+     } /* for (i = ...) */
+   }
+-  
++
+   arith_encode_flush(se);
+   jbg_buf_remove_zeros(s->sde[stripe][layer][plane]);
+   jbg_buf_write(MARKER_ESC, s->sde[stripe][layer][plane]);
+@@ -1541,7 +1541,7 @@ static void resolution_reduction(struct jbg_enc_state *s, int plane,
+   hp1 = hp2 + hbpl;
+   hp3 = hp2 - hbpl;
+   lp = s->lhp[1 - s->highres[plane]][plane];
+-  
++
+ #ifdef DEBUG
+   fprintf(stderr, "resolution_reduction: plane = %d, higher_layer = %d\n",
+ 	  plane, higher_layer);
+@@ -1608,7 +1608,7 @@ static void resolution_reduction(struct jbg_enc_state *s, int plane,
+   {
+     FILE *f;
+     char fn[50];
+-    
++
+     sprintf(fn, "dbg_d=%02d.pbm", higher_layer - 1);
+     f = fopen(fn, "wb");
+     fprintf(f, "P4\n%lu %lu\n", lx, ly);
+@@ -1621,7 +1621,7 @@ static void resolution_reduction(struct jbg_enc_state *s, int plane,
+ }
+ 
+ 
+-/* 
++/*
+  * This function is called inside the three loops of jbg_enc_out() in
+  * order to write the next SDE. It has first to generate the required
+  * SDE and all SDEs which have to be encoded before this SDE can be
+@@ -1642,7 +1642,7 @@ static void output_sde(struct jbg_enc_state *s,
+   int lfcl;     /* lowest fully coded layer */
+   long i;
+   unsigned long u;
+-  
++
+   assert(s->sde[stripe][layer][plane] != SDE_DONE);
+ 
+   if (s->sde[stripe][layer][plane] != SDE_TODO) {
+@@ -1679,7 +1679,7 @@ static void output_sde(struct jbg_enc_state *s,
+     if (lfcl > 1)
+       resolution_reduction(s, plane, lfcl - 1);
+   }
+-  
++
+   encode_sde(s, stripe, layer, plane);
+ 
+ #ifdef DEBUG
+@@ -1687,14 +1687,14 @@ static void output_sde(struct jbg_enc_state *s,
+ #endif
+   jbg_buf_output(&s->sde[stripe][layer][plane], s->data_out, s->file);
+   s->sde[stripe][layer][plane] = SDE_DONE;
+-  
++
+   if (stripe == s->stripes - 1 && layer > 0 &&
+       s->sde[0][layer-1][plane] == SDE_TODO) {
+     s->highres[plane] ^= 1;
+     if (layer > 1)
+       resolution_reduction(s, plane, layer - 1);
+   }
+-  
++
+   return;
+ }
+ 
+@@ -1729,7 +1729,7 @@ void jbg_int2dppriv(unsigned char *dptable, const char *internal)
+   int trans1[ 9] = { 1, 0, 3, 2, 8, 7, 6, 5, 4 };
+   int trans2[11] = { 1, 0, 3, 2, 10, 9, 8, 7, 6, 5, 4 };
+   int trans3[12] = { 1, 0, 3, 2, 11, 10, 9, 8, 7, 6, 5, 4 };
+-  
++
+   for (i = 0; i < 1728; dptable[i++] = 0) ;
+ 
+ #define FILL_TABLE1(offset, len, trans) \
+@@ -1762,7 +1762,7 @@ void jbg_dppriv2int(char *internal, const unsigned char *dptable)
+   int trans1[ 9] = { 1, 0, 3, 2, 8, 7, 6, 5, 4 };
+   int trans2[11] = { 1, 0, 3, 2, 10, 9, 8, 7, 6, 5, 4 };
+   int trans3[12] = { 1, 0, 3, 2, 11, 10, 9, 8, 7, 6, 5, 4 };
+-  
++
+ #define FILL_TABLE2(offset, len, trans) \
+   for (i = 0; i < len; i++) { \
+     k = 0; \
+@@ -1790,7 +1790,7 @@ void jbg_enc_out(struct jbg_enc_state *s)
+   unsigned long bpl;
+   unsigned char buf[20];
+   unsigned long xd, yd, y;
+-  long ii[3], is[3], ie[3];    /* generic variables for the 3 nested loops */ 
++  long ii[3], is[3], ie[3];    /* generic variables for the 3 nested loops */
+   unsigned long stripe;
+   int layer, plane;
+   int order;
+@@ -1918,7 +1918,7 @@ void jbg_enc_out(struct jbg_enc_state *s)
+   for (ii[0] = is[0]; ii[0] <= ie[0]; ii[0]++)
+     for (ii[1] = is[1]; ii[1] <= ie[1]; ii[1]++)
+       for (ii[2] = is[2]; ii[2] <= ie[2]; ii[2]++) {
+-	
++
+ 	stripe = ii[iindex[order][STRIPE]];
+ 	if (s->order & JBG_HITOLO)
+ 	  layer = s->dh - (ii[iindex[order][LAYER]] - s->dl);
+@@ -1949,7 +1949,7 @@ void jbg_enc_out(struct jbg_enc_state *s)
+ 	 */
+ 	if (s->yd1 > s->yd &&
+ 	    (stripe == s->stripes - 1 ||
+-	     (stripe == s->stripes - 2 && 
++	     (stripe == s->stripes - 2 &&
+ 	      (s->dl != s->dh || s->planes > 1)))) {
+ 	  s->yd1 = s->yd;
+ 	  yd = jbg_ceil_half(s->yd, s->d - s->dh);
+@@ -2017,10 +2017,10 @@ void jbg_enc_free(struct jbg_enc_state *s)
+       checked_free(s->lhp[1][plane]);
+     checked_free(s->lhp[1]);
+   }
+-  
++
+   /* clear buffer for index of highres image in lhp */
+   checked_free(s->highres);
+-  
++
+   return;
+ }
+ 
+@@ -2039,7 +2039,7 @@ const char *jbg_strerror(int errnum)
+ 
+ 
+ /*
+- * The constructor for a decoder 
++ * The constructor for a decoder
+  */
+ void jbg_dec_init(struct jbg_dec_state *s)
+ {
+@@ -2077,7 +2077,7 @@ void jbg_dec_maxsize(struct jbg_dec_state *s, unsigned long xmax,
+ /*
+  * Decode the new len PSDC bytes to which data points and add them to
+  * the current stripe. Return the number of bytes which have actually
+- * been read (this will be less than len if a marker segment was 
++ * been read (this will be less than len if a marker segment was
+  * part of the data or if the final byte was 0xff, in which case
+  * this code cannot determine whether we have a marker segment).
+  */
+@@ -2106,7 +2106,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+   se = s->s[plane] + layer - s->dl;
+   se->pscd_ptr = data;
+   se->pscd_end = data + len;
+-  
++
+   /* number of lines per stripe in highres image */
+   hl = s->l0 << layer;
+   /* number of lines per stripe in lowres image */
+@@ -2194,7 +2194,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 	/* this line is 'not typical' and has to be coded completely */
+       }
+       s->pseudo = 0;
+-      
++
+       /*
+        * Layout of the variables line_h1, line_h2, line_h3, which contain
+        * as bits the neighbour pixels of the currently decoded pixel X:
+@@ -2203,7 +2203,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+        *                     76543210 76543210 76543210 76543210     line_h2
+        *   76543210 76543210 76543210 76543210 X                     line_h1
+        */
+-      
++
+       if (x == 0) {
+ 	line_h1 = line_h2 = line_h3 = 0;
+ 	if (s->i > 0 || (y > 0 && !s->reset[plane][layer - s->dl]))
+@@ -2211,7 +2211,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 	if (s->i > 1 || (y > 1 && !s->reset[plane][layer - s->dl]))
+ 	  line_h3 = (long)*(hp - hbpl - hbpl) << 8;
+       }
+-      
++
+       /*
+        * Another tiny JBIG standard bug:
+        *
+@@ -2315,7 +2315,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 				      (line_h1 & 0x003)));
+ 	    if (pix < 0)
+ 	      goto leave;
+-	    
++
+ 	    line_h1 = (line_h1 << 1) | pix;
+ 	    line_h2 <<= 1;
+ 	    line_h3 <<= 1;
+@@ -2327,7 +2327,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+       x = 0;
+       s->pseudo = 1;
+     } /* for (i = ...) */
+-    
++
+   } else {
+ 
+     /*
+@@ -2378,7 +2378,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+        *                     76543210 76543210 Y6543210 76543210     line_l2
+        *                     76543210 76543210 76543210 76543210     line_l1
+        */
+-      
++
+ 
+       if (x == 0) {
+ 	line_h1 = line_h2 = line_h3 = line_l1 = line_l2 = line_l3 = 0;
+@@ -2392,14 +2392,14 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 	line_l2 = (long)*lp2 << 8;
+ 	line_l1 = (long)*lp1 << 8;
+       }
+-      
++
+       /* decode line */
+       while (x < hx) {
+ 	if ((x & 15) == 0)
+ 	  if ((x >> 1) < lbpl * 8 - 8) {
+ 	    line_l1 |= *(lp1 + 1);
+ 	    line_l2 |= *(lp2 + 1);
+-	    if (s->i > 1 || 
++	    if (s->i > 1 ||
+ 		(y > 1 && !s->reset[plane][layer - s->dl]))
+ 	      line_l3 |= *(lp2 - lbpl + 1);
+ 	  }
+@@ -2430,13 +2430,13 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 		line_h1 = (line_h1 << 1) | (cx & 1);
+ 	      } while ((++x & 1) && x < hx);
+ 	      line_h2 <<= 2;  line_h3 <<= 2;
+-	    } else 
++	    } else
+ 	      do {
+-		
++
+ 		/* deterministic prediction */
+ 		if (s->options & JBG_DPON)
+ 		  if ((y & 1) == 0)
+-		    if ((x & 1) == 0) 
++		    if ((x & 1) == 0)
+ 		      /* phase 0 */
+ 		      pix = s->dppriv[((line_l3 >> 15) & 0x003) |
+ 				      ((line_l2 >> 13) & 0x00c) |
+@@ -2492,7 +2492,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 		line_h1 = (line_h1 << 1) | pix;
+ 		line_h2 <<= 1;
+ 		line_h3 <<= 1;
+-		
++
+ 	      } while ((++x & 1) && x < hx);
+ 	    line_l1 <<= 1; line_l2 <<= 1;  line_l3 <<= 1;
+ 	  } while ((x & 7) && x < hx);
+@@ -2502,7 +2502,7 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 	++lp2;
+       } /* while */
+       x = 0;
+-      
++
+       *(hp - 1) <<= hbpl * 8 - hx;
+       if ((s->i & 1) == 0) {
+ 	/* low resolution pixels are used twice */
+@@ -2510,9 +2510,9 @@ static size_t decode_pscd(struct jbg_dec_state *s, unsigned char *data,
+ 	lp2 -= lbpl;
+       } else
+ 	s->pseudo = 1;
+-      
++
+     } /* for (i = ...) */
+-    
++
+   }
+ 
+  leave:
+@@ -2581,7 +2581,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+   if (s->bie_len < 20) {
+     while (s->bie_len < 20 && *cnt < len)
+       s->buffer[s->bie_len++] = data[(*cnt)++];
+-    if (s->bie_len < 20) 
++    if (s->bie_len < 20)
+       return JBG_EAGAIN;
+     /* test whether this looks like a valid JBIG header at all */
+     if (s->buffer[1] < s->buffer[0])
+@@ -2642,7 +2642,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+ 
+     /* calculate number of stripes that will be required */
+     s->stripes = jbg_stripes(s->l0, s->yd, s->d);
+-    
++
+     /* some initialization */
+     s->ii[iindex[s->order & 7][STRIPE]] = 0;
+     s->ii[iindex[s->order & 7][LAYER]] = s->dl;
+@@ -2705,7 +2705,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+   }
+ 
+   /* read in DPTABLE */
+-  if (s->bie_len < 20 + 1728 && 
++  if (s->bie_len < 20 + 1728 &&
+       (s->options & (JBG_DPON | JBG_DPPRIV | JBG_DPLAST)) ==
+       (JBG_DPON | JBG_DPPRIV)) {
+     assert(s->bie_len >= 20);
+@@ -2713,7 +2713,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+       s->dppriv = (char *) checked_malloc(1728, sizeof(char));
+     while (s->bie_len < 20 + 1728 && *cnt < len)
+       s->dppriv[s->bie_len++ - 20] = data[(*cnt)++];
+-    if (s->bie_len < 20 + 1728) 
++    if (s->bie_len < 20 + 1728)
+       return JBG_EAGAIN;
+     dppriv = (unsigned char *) s->dppriv;
+     s->dppriv = (char *) checked_malloc(6912, sizeof(char));
+@@ -2724,7 +2724,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+   /*
+    * BID processing loop
+    */
+-  
++
+   while (*cnt < len) {
+ 
+     /* process floating marker segments */
+@@ -2801,27 +2801,27 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+ 	break;
+       case MARKER_ABORT:
+ 	return JBG_EABORT;
+-	
++
+       case MARKER_SDNORM:
+       case MARKER_SDRST:
+ 	/* decode final pixels based on trailing zero bytes */
+ 	decode_pscd(s, s->buffer, 2);
+ 
+-	arith_decode_init(s->s[s->ii[iindex[s->order & 7][PLANE]]] + 
++	arith_decode_init(s->s[s->ii[iindex[s->order & 7][PLANE]]] +
+ 			  s->ii[iindex[s->order & 7][LAYER]] - s->dl,
+ 			  s->ii[iindex[s->order & 7][STRIPE]] != s->stripes - 1
+ 			  && s->buffer[1] != MARKER_SDRST);
+-	
++
+ 	s->reset[s->ii[iindex[s->order & 7][PLANE]]]
+ 	  [s->ii[iindex[s->order & 7][LAYER]] - s->dl] =
+ 	    (s->buffer[1] == MARKER_SDRST);
+-	
++
+ 	/* prepare for next SDE */
+ 	s->x = 0;
+ 	s->i = 0;
+ 	s->pseudo = 1;
+ 	s->at_moves = 0;
+-	
++
+ 	/* increment layer/stripe/plane loop variables */
+ 	/* start and end value for each loop: */
+ 	is[iindex[s->order & 7][STRIPE]] = 0;
+@@ -2842,7 +2842,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+ 	} while (--i >= 0 && j);
+ 
+ 	s->buf_len = 0;
+-	
++
+ 	/* check whether this have been all SDEs */
+ 	if (j) {
+ #ifdef DEBUG
+@@ -2887,7 +2887,7 @@ int jbg_dec_in(struct jbg_dec_state *s, unsigned char *data, size_t len,
+ #endif
+ 	return JBG_EINVAL | 14;
+       }
+-      
++
+     }
+   }  /* of BID processing loop 'while (*cnt < len) ...' */
+ 
+@@ -2930,7 +2930,7 @@ unsigned long jbg_dec_getheight(const struct jbg_dec_state *s)
+     else
+       return jbg_ceil_half(s->yd, s->d - (s->ii[0] - 1));
+   }
+-  
++
+   return s->yd;
+ }
+ 
+@@ -2950,7 +2950,7 @@ unsigned char *jbg_dec_getimage(const struct jbg_dec_state *s, int plane)
+     else
+       return s->lhp[(s->ii[0] - 1) & 1][plane];
+   }
+-  
++
+   return s->lhp[s->d & 1][plane];
+ }
+ 
+@@ -2968,11 +2968,11 @@ unsigned long jbg_dec_getsize(const struct jbg_dec_state *s)
+     if (s->ii[0] < 1)
+       return 0;
+     else
+-      return 
++      return
+ 	jbg_ceil_half(s->xd, s->d - (s->ii[0] - 1) + 3) * /* overflow risk? */
+ 	jbg_ceil_half(s->yd, s->d - (s->ii[0] - 1));
+   }
+-  
++
+   return jbg_ceil_half(s->xd, 3) * s->yd;
+ }
+ 
+@@ -2990,17 +2990,17 @@ unsigned long jbg_dec_getsize_merged(const struct jbg_dec_state *s)
+     if (s->ii[0] < 1)
+       return 0;
+     else
+-      return 
++      return
+ 	jbg_ceil_half(s->xd, s->d - (s->ii[0] - 1)) * /* overflow risk? */
+ 	jbg_ceil_half(s->yd, s->d - (s->ii[0] - 1)) *
+ 	((s->planes + 7) / 8);
+   }
+-  
++
+   return s->xd * s->yd * ((s->planes + 7) / 8);
+ }
+ 
+ 
+-/* 
++/*
+  * The destructor function which releases any resources obtained by the
+  * other decoder functions.
+  */
+@@ -3021,7 +3021,7 @@ void jbg_dec_free(struct jbg_dec_state *s)
+     checked_free(s->lhp[0][i]);
+     checked_free(s->lhp[1][i]);
+   }
+-  
++
+   checked_free(s->s);
+   checked_free(s->tx);
+   checked_free(s->ty);
+@@ -3063,10 +3063,10 @@ void jbg_split_planes(unsigned long x, unsigned long y, int has_planes,
+   if (encode_planes > has_planes)
+     encode_planes = has_planes;
+   use_graycode = use_graycode != 0 && encode_planes > 1;
+-  
++
+   for (p = 0; p < encode_planes; p++)
+     memset(dest[p], 0, bpl * y);
+-  
++
+   for (line = 0; line < y; line++) {                 /* lines loop */
+     for (i = 0; i * 8 < x; i++) {                    /* dest bytes loop */
+       for (k = 0; k < 8 && i * 8 + k < x; k++) {     /* pixel loop */
+@@ -3098,11 +3098,11 @@ void jbg_split_planes(unsigned long x, unsigned long y, int has_planes,
+     for (p = 0; p < encode_planes; p++)              /* right padding loop */
+       dest[p][bpl * (line + 1) - 1] <<= 8 - k;
+   }
+-  
++
+   return;
+ }
+ 
+-/* 
++/*
+  * Merge the separate bit planes decoded by the JBIG decoder into an
+  * integer pixel field. This is essentially the counterpart to
+  * jbg_split_planes().
+@@ -3123,7 +3123,7 @@ void jbg_dec_merge_planes(const struct jbg_dec_state *s, int use_graycode,
+ 
+   /* sanity check */
+   use_graycode = use_graycode != 0;
+-  
++
+   x = jbg_dec_getwidth(s);
+   y = jbg_dec_getheight(s);
+   if (x == 0 || y == 0)
+@@ -3137,7 +3137,7 @@ void jbg_dec_merge_planes(const struct jbg_dec_state *s, int use_graycode,
+       src = s->lhp[(s->ii[0] - 1) & 1];
+   else
+     src = s->lhp[s->d & 1];
+-  
++
+   for (line = 0; line < y; line++) {                    /* lines loop */
+     for (i = 0; i * 8 < x; i++) {                       /* src bytes loop */
+       for (k = 0; k < 8 && i * 8 + k < x; k++) {        /* pixel loop */
+@@ -3157,10 +3157,10 @@ void jbg_dec_merge_planes(const struct jbg_dec_state *s, int use_graycode,
+       }
+     }
+   }
+-  
++
+   if (bp - buf > 0)
+     data_out(buf, bp - buf, file);
+-  
++
+   return;
+ }
+ 
+@@ -3175,7 +3175,7 @@ void jbg_dec_merge_planes(const struct jbg_dec_state *s, int use_graycode,
+  *  - not enough bytes left for complete marker segment
+  *  - no marker segment terminates the PSCD
+  *  - unknown marker code encountered
+- *  
++ *
+  */
+ unsigned char *jbg_next_pscdms(unsigned char *p, size_t len)
+ {
+diff --git a/libjbig/jbig.h b/libjbig/jbig.h
+index 6799410..81c1adc 100644
+--- a/libjbig/jbig.h
++++ b/libjbig/jbig.h
+@@ -152,7 +152,7 @@ struct jbg_dec_state {
+ 
+   /*
+    * Pointers to array [planes] of lower/higher resolution images.
+-   * lhp[d & 1] contains image of layer d. 
++   * lhp[d & 1] contains image of layer d.
+    */
+   unsigned char **lhp[2];
+ 
+@@ -167,7 +167,7 @@ struct jbg_dec_state {
+   int buf_len;                                /* number of bytes in buffer */
+   unsigned long comment_skip;      /* remaining bytes of a COMMENT segment */
+   unsigned long x;              /* x position of next pixel in current SDE */
+-  unsigned long i; /* line in current SDE (first line of each stripe is 0) */ 
++  unsigned long i; /* line in current SDE (first line of each stripe is 0) */
+   int at_moves;                /* number of AT moves in the current stripe */
+   unsigned long at_line[JBG_ATMOVES_MAX];           /* lines at which an   *
+ 					             * AT move will happen */
+diff --git a/libjbig/jbig.txt b/libjbig/jbig.txt
+index f616290..70ca464 100644
+--- a/libjbig/jbig.txt
++++ b/libjbig/jbig.txt
+@@ -307,7 +307,7 @@ to stdout, looks like this:
+ void output_bie(unsigned char *start, size_t len, void *file)
+ {
+   fwrite(start, 1, len, (FILE *) file);
+-  
++
+   return;
+ }
+ 
+@@ -320,12 +320,12 @@ int main()
+   };
+   unsigned char *bitmaps[1] = { bitmap };
+   struct jbg_enc_state se;
+-  
+-  jbg_enc_init(&se, 23, 5, 1, bitmaps, 
++
++  jbg_enc_init(&se, 23, 5, 1, bitmaps,
+ 	       output_bie, stdout);              /* initialize encoder */
+   jbg_enc_out(&se);                                    /* encode image */
+   jbg_enc_free(&se);                    /* release allocated resources */
+-  
++
+   return 0;
+ }
+ ---------------------------------------------------------------------------
+@@ -365,7 +365,7 @@ In order to change any of these default parameters, additional
+ functions have to be called between jbg_enc_init() and jbg_enc_out().
+ 
+ In order to activate progressive encoding, it is possible to specify
+-with 
++with
+ 
+   void jbg_enc_layers(struct jbg_enc_state *s, int d);
+ 
+diff --git a/libjbig/jbig85.c b/libjbig/jbig85.c
+index ca9cf43..924b511 100644
+--- a/libjbig/jbig85.c
++++ b/libjbig/jbig85.c
+@@ -22,7 +22,7 @@
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- * 
++ *
+  *  If you want to use this program under different license conditions,
+  *  then contact the author for an arrangement.
+  */
+@@ -55,7 +55,7 @@
+ 
+ /* object code version id */
+ 
+-const char jbg85_version[] = 
++const char jbg85_version[] =
+   "JBIG-KIT " JBG85_VERSION " (T.85 version) -- (c) 1995-2014 Markus Kuhn -- "
+   "Licence: " JBG85_LICENCE "\n";
+ 
+@@ -118,12 +118,12 @@ void jbg85_enc_init(struct jbg85_enc_state *s,
+   s->y = 0;
+   s->i = 0;
+   s->ltp_old = 0;
+-  
++
+   /* initialize arithmetic encoder */
+   arith_encode_init(&s->s, 0);
+   s->s.byte_out = &enc_byte_out;
+   s->s.file = s;
+-  
++
+   return;
+ }
+ 
+@@ -197,7 +197,7 @@ void jbg85_enc_lineout(struct jbg85_enc_state *s, unsigned char *line,
+     /* we have already output the full image, go away */
+     return;
+   }
+-  
++
+   /* line 0 has no previous line */
+   if (s->y < 1)
+     prevline = NULL;
+@@ -264,7 +264,7 @@ void jbg85_enc_lineout(struct jbg85_enc_state *s, unsigned char *line,
+       buf[7] = 0;
+       s->data_out(buf, 8, s->file);
+     }
+-    
++
+     /* initialize adaptive template movement algorithm */
+     if (s->mx == 0) {
+       s->new_tx = 0;  /* ATMOVE has been disabled */
+@@ -309,7 +309,7 @@ void jbg85_enc_lineout(struct jbg85_enc_state *s, unsigned char *line,
+ #endif
+     s->ltp_old = ltp;
+   }
+-  
++
+   if (!ltp) {
+ 
+     /*
+@@ -320,16 +320,16 @@ void jbg85_enc_lineout(struct jbg85_enc_state *s, unsigned char *line,
+      *          76543210765432107654321076543210     line_h2
+      *  76543210765432107654321X76543210             line_h1
+      */
+-  
++
+     /* pointer to first image byte of the three lines of interest */
+     hp3 = prevprevline;
+     hp2 = prevline;
+     hp1 = line;
+-  
++
+     line_h1 = line_h2 = line_h3 = 0;
+     if (hp2) line_h2 = (long)*hp2 << 8;
+     if (hp3) line_h3 = (long)*hp3 << 8;
+-  
++
+     /* encode line */
+     for (j = 0; j < s->x0;) {
+       line_h1 |= *hp1;
+@@ -479,7 +479,7 @@ void jbg85_enc_lineout(struct jbg85_enc_state *s, unsigned char *line,
+     }
+   }
+   assert(s->tx >= 0); /* i.e., tx can safely be cast to unsigned */
+-  
++
+ #ifdef DEBUG
+   if (s->y == s->y0)
+     fprintf(stderr, "tp_lines = %ld, encoded_pixels = %ld\n",
+@@ -552,7 +552,7 @@ const char *jbg85_strerror(int errnum)
+ 
+ 
+ /*
+- * The constructor for a decoder 
++ * The constructor for a decoder
+  */
+ void jbg85_dec_init(struct jbg85_dec_state *s,
+ 		    unsigned char *buf, size_t buflen,
+@@ -609,7 +609,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+   /* forward data to arithmetic decoder */
+   s->s.pscd_ptr = data;
+   s->s.pscd_end = data + len;
+-  
++
+   /* restore a few local variables */
+   line_h1 = s->line_h1;
+   line_h2 = s->line_h2;
+@@ -640,7 +640,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+ #endif
+ 	}
+     assert(s->tx >= 0); /* i.e., tx can safely be cast to unsigned */
+-    
++
+     /* typical prediction */
+     if (s->options & JBG_TPBON && s->pseudo) {
+       slntp = arith_decode(&s->s, (s->options & JBG_LRLTWO) ? TPB2CX : TPB3CX);
+@@ -668,7 +668,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+       /* this line is 'not typical' and has to be coded completely */
+     }
+     s->pseudo = 0;
+-    
++
+     /*
+      * Layout of the variables line_h1, line_h2, line_h3, which contain
+      * as bits the neighbour pixels of the currently decoded pixel X:
+@@ -677,7 +677,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+      *                     76543210 76543210 76543210 76543210     line_h2
+      *   76543210 76543210 76543210 76543210 X                     line_h1
+      */
+-    
++
+     if (x == 0) {
+       line_h1 = line_h2 = line_h3 = 0;
+       if (s->p[1] >= 0)
+@@ -685,7 +685,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+       if (s->p[2] >= 0)
+ 	line_h3 = (long)*hp3 << 8;
+     }
+-    
++
+     /* decode line */
+     while (x < s->x0) {
+       if ((x & 7) == 0) {
+@@ -763,7 +763,7 @@ static size_t decode_pscd(struct jbg85_dec_state *s, unsigned char *data,
+     s->p[1] = s->p[0];
+     if (++(s->p[0]) >= buflines) s->p[0] = 0;
+   } /* for (i = ...) */
+-  
++
+  leave:
+ 
+   /* save a few local variables */
+@@ -785,11 +785,11 @@ static int finish_sde(struct jbg85_dec_state *s)
+   s->s.nopadding = 0;
+   if (decode_pscd(s, s->buffer, 2) != 2 && s->intr)
+     return 1;
+-  
++
+   /* prepare decoder for next SDE */
+   arith_decode_init(&s->s, s->buffer[1] == MARKER_SDNORM);
+   s->s.nopadding = s->options & JBG_VLENGTH;
+-	
++
+   s->x = 0;
+   s->i = 0;
+   s->pseudo = 1;
+@@ -804,7 +804,7 @@ static int finish_sde(struct jbg85_dec_state *s)
+ 
+   return 0;
+ }
+-	
++
+ /*
+  * Provide to the decoder a new BIE fragment of len bytes starting at data.
+  *
+@@ -848,7 +848,7 @@ int jbg85_dec_in(struct jbg85_dec_state *s, unsigned char *data, size_t len,
+   if (s->bie_len < 20) {
+     while (s->bie_len < 20 && *cnt < len)
+       s->buffer[s->bie_len++] = data[(*cnt)++];
+-    if (s->bie_len < 20) 
++    if (s->bie_len < 20)
+       return JBG_EAGAIN;
+     /* parse header parameters */
+     s->x0 = (((long) s->buffer[ 4] << 24) | ((long) s->buffer[ 5] << 16) |
+@@ -888,7 +888,7 @@ int jbg85_dec_in(struct jbg85_dec_state *s, unsigned char *data, size_t len,
+   /*
+    * BID processing loop
+    */
+-  
++
+   while (*cnt < len || s->end_of_bie == 1) {
+     if (s->end_of_bie == 1) s->end_of_bie = 2;
+ 
+@@ -905,7 +905,7 @@ int jbg85_dec_in(struct jbg85_dec_state *s, unsigned char *data, size_t len,
+       }
+       continue;
+     }
+-    
++
+     /* load marker segments into s->buffer for processing */
+     if (s->buf_len > 0) {
+       assert(s->buffer[0] == MARKER_ESC);
+@@ -982,7 +982,7 @@ int jbg85_dec_in(struct jbg85_dec_state *s, unsigned char *data, size_t len,
+ #endif
+ 	s->y0 = y;
+ 	break;
+-	
++
+       case MARKER_SDNORM:
+       case MARKER_SDRST:
+ 
+@@ -1063,7 +1063,7 @@ int jbg85_dec_in(struct jbg85_dec_state *s, unsigned char *data, size_t len,
+ #endif
+ 	return JBG_EINVAL | 14; /* PSCD was longer than expected */
+       }
+-      
++
+     }
+   }  /* of BID processing loop 'while (*cnt < len) ...' */
+ 
+diff --git a/libjbig/jbig85.h b/libjbig/jbig85.h
+index 125d563..7bdf9a0 100644
+--- a/libjbig/jbig85.h
++++ b/libjbig/jbig85.h
+@@ -114,8 +114,8 @@ struct jbg85_dec_state {
+   unsigned long comment_skip;      /* remaining bytes of a COMMENT segment */
+   unsigned long x;                             /* x position of next pixel */
+   unsigned long stripe;                                  /* current stripe */
+-  unsigned long y;                      /* line in image (first line is 0) */ 
+-  unsigned long i;   /* line in current stripe (first line of stripe is 0) */ 
++  unsigned long y;                      /* line in image (first line is 0) */
++  unsigned long i;   /* line in current stripe (first line of stripe is 0) */
+   int at_moves;                /* number of AT moves in the current stripe */
+   unsigned long at_line[JBG85_ATMOVES_MAX];         /* lines at which an   *
+ 					             * AT move will happen */
+diff --git a/libjbig/jbig85.txt b/libjbig/jbig85.txt
+index dbec5ec..fc2d6fa 100644
+--- a/libjbig/jbig85.txt
++++ b/libjbig/jbig85.txt
+@@ -288,7 +288,7 @@ to stdout, looks like this:
+ void output_bie(unsigned char *start, size_t len, void *file)
+ {
+   fwrite(start, 1, len, (FILE *) file);
+-  
++
+   return;
+ }
+ 
+@@ -301,7 +301,7 @@ int main()
+   };
+   struct jbg85_enc_state se;
+   int i;
+-  
++
+   jbg85_enc_init(&se, 23, 5, output_bie, stdout);      /* initialize encoder */
+   jbg85_enc_options(&se, JBG_TPBON, 0, -1);      /* clear JBG_VLENGTH option */
+   for (i = 0; i < 5; i++) {
+diff --git a/libjbig/jbig_ar.c b/libjbig/jbig_ar.c
+index d23a317..32e5bf6 100644
+--- a/libjbig/jbig_ar.c
++++ b/libjbig/jbig_ar.c
+@@ -22,7 +22,7 @@
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- * 
++ *
+  *  If you want to use this program under different license conditions,
+  *  then contact the author for an arrangement.
+  */
+@@ -106,7 +106,7 @@ static unsigned char nlpstab[113] = {
+ void arith_encode_init(struct jbg_arenc_state *s, int reuse_st)
+ {
+   int i;
+-  
++
+   if (!reuse_st)
+     for (i = 0; i < 4096; s->st[i++] = 0) ;
+   s->c = 0;
+@@ -114,7 +114,7 @@ void arith_encode_init(struct jbg_arenc_state *s, int reuse_st)
+   s->sc = 0;
+   s->ct = 11;
+   s->buffer = -1;    /* empty */
+-  
++
+   return;
+ }
+ 
+@@ -144,7 +144,7 @@ void arith_encode_flush(struct jbg_arenc_state *s)
+ 	s->byte_out(0x00, s->file);
+   } else {
+     if (s->buffer >= 0)
+-      s->byte_out(s->buffer, s->file); 
++      s->byte_out(s->buffer, s->file);
+     /* T.82 figure 30 says buffer+1 for the above line! Typo? */
+     for (; s->sc; --s->sc) {
+       s->byte_out(0xff, s->file);
+@@ -167,7 +167,7 @@ void arith_encode_flush(struct jbg_arenc_state *s)
+ }
+ 
+ 
+-void arith_encode(struct jbg_arenc_state *s, int cx, int pix) 
++void arith_encode(struct jbg_arenc_state *s, int cx, int pix)
+ {
+   register unsigned lsz, ss;
+   register unsigned char *st;
+@@ -254,7 +254,7 @@ void arith_encode(struct jbg_arenc_state *s, int cx, int pix)
+       s->ct = 8;
+     }
+   } while (s->a < 0x8000);
+- 
++
+   return;
+ }
+ 
+@@ -262,7 +262,7 @@ void arith_encode(struct jbg_arenc_state *s, int cx, int pix)
+ void arith_decode_init(struct jbg_ardec_state *s, int reuse_st)
+ {
+   int i;
+-  
++
+   if (!reuse_st)
+     for (i = 0; i < 4096; s->st[i++] = 0) ;
+   s->c = 0;
+@@ -295,7 +295,7 @@ void arith_decode_init(struct jbg_ardec_state *s, int reuse_st)
+  *   decoded.
+  *
+  * s->pscd_ptr == s->pscd_end - 1:
+- * 
++ *
+  *   The decoder has used up all provided PSCD bytes except for the
+  *   very last byte, because that has the value 0xff. The decoder can
+  *   at this point not yet tell whether this 0xff belongs to a
+@@ -338,7 +338,7 @@ int arith_decode(struct jbg_ardec_state *s, int cx)
+       if (s->pscd_ptr >= s->pscd_end) {
+ 	return -1;  /* more bytes needed */
+       }
+-      if (*s->pscd_ptr == 0xff) 
++      if (*s->pscd_ptr == 0xff)
+ 	if (s->pscd_ptr + 1 >= s->pscd_end) {
+ 	  return -1; /* final 0xff byte not processed */
+ 	} else {
+diff --git a/libjbig/tstcodec.c b/libjbig/tstcodec.c
+index 9ba09cd..4e7bb74 100644
+--- a/libjbig/tstcodec.c
++++ b/libjbig/tstcodec.c
+@@ -1,6 +1,6 @@
+ /*
+  *  A sequence of test procedures for this JBIG implementation
+- * 
++ *
+  *  Run this test sequence after each modification on the JBIG library.
+  *
+  *  Markus Kuhn -- http://www.cl.cam.ac.uk/~mgk25/
+@@ -28,12 +28,12 @@ long testbuf_len;
+ static void *checkedmalloc(size_t n)
+ {
+   void *p;
+-  
++
+   if ((p = malloc(n)) == NULL) {
+     fprintf(stderr, "Sorry, not enough memory available!\n");
+     exit(1);
+   }
+-  
++
+   return p;
+ }
+ 
+@@ -60,7 +60,7 @@ static void testbuf_writel(unsigned char *start, size_t len, void *dummy)
+   {
+     unsigned char *p;
+     unsigned sum = 0;
+-    
++
+     for (p = start; p - start < (ptrdiff_t) len; sum = (sum ^ *p++) << 1);
+     printf("  testbuf_writel: %4lu bytes, checksum %04x\n",
+ 	   (unsigned long) len, sum & 0xffff);
+@@ -76,13 +76,13 @@ static void testbuf_writel(unsigned char *start, size_t len, void *dummy)
+  * Store the artificial test image defined in T.82, clause 7.2.1 at
+  * pic. The image requires 477995 bytes of memory, is 1960 x 1951 pixels
+  * large and has one plane.
+- */ 
++ */
+ static void testimage(unsigned char *pic)
+ {
+   unsigned long i, j, sum;
+   unsigned int prsg, repeat[8];
+   unsigned char *p;
+-  
++
+   memset(pic, 0, TESTPIC_SIZE);
+   p = pic;
+   prsg = 1;
+@@ -118,7 +118,7 @@ static void testimage(unsigned char *pic)
+ 
+   return;
+ }
+-  
++
+ 
+ /*
+  * Perform a full test cycle with one set of parameters. Encode an image
+@@ -166,7 +166,7 @@ static int test_cycle(unsigned char **orig_image, int width, int height,
+     }
+   else
+     puts("");
+-  
++
+   printf("Test %s.2: Decoding whole chunk ...\n", test_id);
+   jbg_dec_init(&sjd);
+   result = jbg_dec_in(&sjd, testbuf, testbuf_len, NULL);
+@@ -225,7 +225,7 @@ static int test_cycle(unsigned char **orig_image, int width, int height,
+ 
+   jbg_dec_free(&sjd);
+   puts("");
+-  
++
+   return trouble != 0;
+ }
+ 
+@@ -348,7 +348,7 @@ int main(int argc, char **argv)
+     puts("Generating test image ...");
+     testimage(testpic);
+     printf("Storing in '%s' ...\n", argv[1]);
+-    
++
+     /* write out test image as PBM file */
+     f = fopen(argv[1], "wb");
+     if (!f) abort();
+@@ -460,7 +460,7 @@ int main(int argc, char **argv)
+   } else
+     puts(PASSED);
+   printf("\n");
+-  
++
+   puts("3) Parametric algorithm test sequence from ITU-T T.82, clause 7.2\n"
+        "-----------------------------------------------------------------\n");
+   puts("Generating test image ...");
+@@ -518,7 +518,7 @@ int main(int argc, char **argv)
+ 
+   puts("5) Small test image, 0-3 layers, 4 planes, different orders\n"
+        "-----------------------------------------------------------\n");
+-  
++
+   /* test a simple multi-plane image */
+   ppp[0] = jbig_normal;
+   ppp[1] = jbig_upsidedown;
+diff --git a/libjbig/tstcodec85.c b/libjbig/tstcodec85.c
+index 1a9d95e..7e49403 100644
+--- a/libjbig/tstcodec85.c
++++ b/libjbig/tstcodec85.c
+@@ -1,6 +1,6 @@
+ /*
+  *  A sequence of test procedures for this JBIG implementation
+- * 
++ *
+  *  Run this test sequence after each modification on the JBIG library.
+  *
+  *  Markus Kuhn -- http://www.cl.cam.ac.uk/~mgk25/
+@@ -29,12 +29,12 @@ long testbuf_len;
+ static void *checkedmalloc(size_t n)
+ {
+   void *p;
+-  
++
+   if ((p = calloc(1, n)) == NULL) {
+     fprintf(stderr, "Sorry, not enough memory available!\n");
+     exit(1);
+   }
+-  
++
+   return p;
+ }
+ 
+@@ -61,7 +61,7 @@ static void testbuf_writel(unsigned char *start, size_t len, void *dummy)
+   {
+     unsigned char *p;
+     unsigned sum = 0;
+-    
++
+     for (p = start; p - start < (ptrdiff_t) len; sum = (sum ^ *p++) << 1);
+     printf("  testbuf_writel: %4lu bytes, checksum %04x\n",
+ 	   (unsigned long) len, sum & 0xffff);
+@@ -89,13 +89,13 @@ static int line_out(const struct jbg85_dec_state *s,
+  * Store the artificial test image defined in T.82, clause 7.2.1 at
+  * pic. The image requires 477995 bytes of memory, is 1960 x 1951 pixels
+  * large and has one plane.
+- */ 
++ */
+ static void testimage(unsigned char *pic)
+ {
+   unsigned long i, j, sum;
+   unsigned int prsg, repeat[8];
+   unsigned char *p;
+-  
++
+   memset(pic, 0, TESTPIC_SIZE);
+   p = pic;
+   prsg = 1;
+@@ -131,7 +131,7 @@ static void testimage(unsigned char *pic)
+ 
+   return;
+ }
+-  
++
+ 
+ /*
+  * Perform a full test cycle with one set of parameters. Encode an image
+@@ -157,7 +157,7 @@ static int test_cycle(unsigned char *orig_image, int width, int height,
+   plane_size = bpl * height;
+   image = (unsigned char *) checkedmalloc(plane_size);
+   memcpy(image, orig_image, plane_size);
+-  
++
+   printf("\nTest-85 %s.1: Encoding ...\n", test_id);
+   testbuf_len = 0;
+   jbg85_enc_init(&sje, width, height, testbuf_writel, NULL);
+@@ -178,7 +178,7 @@ static int test_cycle(unsigned char *orig_image, int width, int height,
+     }
+   else
+     puts("");
+-  
++
+ #if 1
+   buffer_len = ((width >> 3) + !!(width & 7)) * 3;
+   buffer = (unsigned char *) checkedmalloc(buffer_len);
+@@ -239,7 +239,7 @@ static int test_cycle(unsigned char *orig_image, int width, int height,
+ 
+ #endif
+   puts("");
+-  
++
+   return trouble != 0;
+ }
+ 
+@@ -283,11 +283,11 @@ int main(int argc, char **argv)
+    * output file name for exporting test image */
+   if (argc > 1) {
+     FILE *f;
+-    
++
+     puts("Generating test image ...");
+     testimage(testpic);
+     printf("Storing in '%s' ...\n", argv[1]);
+-    
++
+     /* write out test image as PBM file */
+     f = fopen(argv[1], "wb");
+     if (!f) abort();
+@@ -399,7 +399,7 @@ int main(int argc, char **argv)
+   } else
+     puts(PASSED);
+   printf("\n");
+-  
++
+   puts("3) Parametric algorithm test sequence from ITU-T T.82, clause 7.2\n"
+        "-----------------------------------------------------------------\n");
+   puts("Generating test image ...");
+diff --git a/pbmtools/Makefile b/pbmtools/Makefile
+index 5983517..95545a4 100644
+--- a/pbmtools/Makefile
++++ b/pbmtools/Makefile
+@@ -7,7 +7,7 @@ CC = gcc
+ 
+ # Options for the compiler
+ CFLAGS = -g -O -W -Wall -Wno-unused-result -ansi -pedantic # --coverage
+-CPPFLAGS = -I../libjbig 
++CPPFLAGS = -I../libjbig
+ LDFLAGS = -L../libjbig
+ 
+ .PHONY: txt pdf test test82 test85 clean
+diff --git a/pbmtools/jbgtopbm.1 b/pbmtools/jbgtopbm.1
+index c6a9c15..66d3c38 100644
+--- a/pbmtools/jbgtopbm.1
++++ b/pbmtools/jbgtopbm.1
+@@ -13,7 +13,7 @@ jbgtopbm \- JBIG1 to portable bitmap file converter
+ ]]
+ .br
+ .SH DESCRIPTION
+-Reads in a 
++Reads in a
+ .I JBIG1
+ bi-level image entity (BIE), decompresses it, and outputs a portable
+ bitmap (PBM) file.
+@@ -43,7 +43,7 @@ file will be produced.
+ .SH OPTIONS
+ .TP 12
+ .B \-
+-A single hyphen instead of an input file name will cause 
++A single hyphen instead of an input file name will cause
+ .I jbgtopbm
+ to read the data from standard input instead from a file.
+ .TP
+diff --git a/pbmtools/jbgtopbm.c b/pbmtools/jbgtopbm.c
+index d5d70d1..dd42083 100644
+--- a/pbmtools/jbgtopbm.c
++++ b/pbmtools/jbgtopbm.c
+@@ -80,7 +80,7 @@ void read_file(unsigned char **buf, size_t *buflen, size_t *len, FILE *f)
+     fprintf(stderr, "Oops, realloc failed when shrinking buffer!\n");
+     exit(1);
+   }
+-  
++
+   return;
+ }
+ 
+@@ -129,7 +129,7 @@ void diagnose_bie(FILE *fin)
+   unsigned long stripes;
+   int layers, planes;
+   unsigned long sdes, sde = 0;
+-  
++
+   /* read BIH */
+   read_file(&bie, &buflen, &len, fin);
+   if (len < 20) {
+diff --git a/pbmtools/pbmtojbg.1 b/pbmtools/pbmtojbg.1
+index cf863bf..63a49ea 100644
+--- a/pbmtools/pbmtojbg.1
++++ b/pbmtools/pbmtojbg.1
+@@ -51,7 +51,7 @@ a multi-plane BIE.
+ .SH OPTIONS
+ .TP 12
+ .BI \-
+-A single hyphen instead of an input file name causes 
++A single hyphen instead of an input file name causes
+ .I pbmtojbg
+ to read the data from standard input instead of from a file.
+ .TP
+@@ -201,7 +201,7 @@ order code, the layer loop can be reversed so that it counts down to zero
+ and then higher resolution layers will be stored before lower layers.
+ The default order is 3, which writes at first all planes of the first
+ stripe and then completes layer 0 before continuing with the next
+-layer, and so on. 
++layer, and so on.
+ .TP
+ .BI \-p " number"
+ This option activates or deactivates various optional algorithms
+diff --git a/pbmtools/pbmtojbg.c b/pbmtools/pbmtojbg.c
+index f0e74e7..8892a08 100644
+--- a/pbmtools/pbmtojbg.c
++++ b/pbmtools/pbmtojbg.c
+@@ -63,17 +63,17 @@ static void usage(void)
+ void *checkedmalloc(size_t n)
+ {
+   void *p;
+-  
++
+   if ((p = malloc(n)) == NULL) {
+     fprintf(stderr, "Sorry, not enough memory available!\n");
+     exit(1);
+   }
+-  
++
+   return p;
+ }
+ 
+ 
+-/* 
++/*
+  * Read an ASCII integer number from file f and skip any PBM
+  * comments which are encountered.
+  */
+@@ -241,7 +241,7 @@ int main (int argc, char **argv)
+ 	usage();
+       }
+   }
+-  
++
+   if (fnin) {
+     fin = fopen(fnin, "rb");
+     if (!fin) {
+diff --git a/pbmtools/pbmtojbg85.c b/pbmtools/pbmtojbg85.c
+index 425652e..710efe1 100644
+--- a/pbmtools/pbmtojbg85.c
++++ b/pbmtools/pbmtojbg85.c
+@@ -47,17 +47,17 @@ static void usage(void)
+ void *checkedmalloc(size_t n)
+ {
+   void *p;
+-  
++
+   if ((p = malloc(n)) == NULL) {
+     fprintf(stderr, "Sorry, not enough memory available!\n");
+     exit(1);
+   }
+-  
++
+   return p;
+ }
+ 
+ 
+-/* 
++/*
+  * Read an ASCII integer number from file f and skip any PBM
+  * comments which are encountered.
+  */
+@@ -163,7 +163,7 @@ int main (int argc, char **argv)
+ 	usage();
+       }
+   }
+-  
++
+   /* open input file */
+   if (fnin) {
+     fin = fopen(fnin, "rb");
+@@ -198,7 +198,7 @@ int main (int argc, char **argv)
+   /* allocate buffer for a single image line */
+   bpl = (width >> 3) + !!(width & 7);     /* bytes per line */
+   lines = (unsigned char *) checkedmalloc(bpl * 3);
+-  
++
+   /* open output file */
+   if (fnout) {
+     fout = fopen(fnout, "wb");

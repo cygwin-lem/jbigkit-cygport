@@ -1,0 +1,51 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Markus Kuhn <Markus.Kuhn@cl.cam.ac.uk>
+Date: Mon, 9 Nov 2015 15:15:12 +0000
+Subject: [PATCH] clarified in documentation requirement to also link with
+ jbig_ar.c
+
+
+diff --git a/libjbig/jbig.txt b/libjbig/jbig.txt
+index bdc14b1..f616290 100644
+--- a/libjbig/jbig.txt
++++ b/libjbig/jbig.txt
+@@ -226,11 +226,12 @@ during the transmission.
+ 
+ 2.2  A simple compression application
+ 
+-In order to use jbig.c in your application, just link libjbig.a to
+-your executable (on Unix systems just add -ljbig and -L. to the
+-command line options of your compiler, on other systems you will have
+-to write a new Makefile anyway), copy the file jbig.h into your source
+-directory and put the line
++In order to use jbig.c in your application, just link your executable
++with both jbig.c and jbig_ar.c. Both are already combined into
++libjbig.a by the provided Makefile, so on Unix systems, just add
++-ljbig and -L. to the command line options of your compiler. On other
++systems you will probably have to write a new Makefile. Make sure your
++compiler can find the file jbig.h and put the line
+ 
+   #include "jbig.h"
+ 
+diff --git a/libjbig/jbig85.txt b/libjbig/jbig85.txt
+index fd1eb38..dbec5ec 100644
+--- a/libjbig/jbig85.txt
++++ b/libjbig/jbig85.txt
+@@ -196,11 +196,12 @@ is white and 1 is black for scanned paper documents.
+ 
+ 2.2  A simple compression application
+ 
+-In order to use the library in your application, just link libjbig85.a
+-to your executable (on Unix systems just add -ljbig85 and -L. to the
+-command line options of your compiler, on other systems you will have
+-to write a new Makefile anyway), copy the file jbig85.h into your
+-source directory and put the line
++In order to use jbig85.c in your application, just link your
++executable with both jbig85.c and jbig_ar.c. Both are already combined
++into libjbig85.a by the provided Makefile, so on Unix systems, just
++add -ljbig85 and -L. to the command line options of your compiler. On
++other systems you will probably have to write a new Makefile. Make
++sure your compiler can find the file jbig85.h and put the line
+ 
+   #include "jbig85.h"
+ 
