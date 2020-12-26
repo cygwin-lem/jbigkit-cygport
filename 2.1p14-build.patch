@@ -1,6 +1,16 @@
---- origsrc/jbigkit/libjbig/Makefile	2008-08-30 12:20:52.000000000 -0500
-+++ src/jbigkit/libjbig/Makefile	2013-04-23 23:17:31.649822300 -0500
-@@ -3,11 +3,13 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lemures Lemniscati <lemures.lemniscati@gmail.com>
+Date: Sat, 26 Dec 2020 15:51:45 +0900
+Subject: [PATCH] Cygwin: 2.1p14-build.patch
+
+Based on a patch:
+  https://www.cygwin.com/git/?p=git/cygwin-packages/jbigkit.git;a=blob_plain;f=2.0-build.patch
+
+diff --git a/libjbig/Makefile b/libjbig/Makefile
+index 10362bc..2bbdee4 100644
+--- a/libjbig/Makefile
++++ b/libjbig/Makefile
+@@ -2,11 +2,13 @@
  
  # Select an ANSI/ISO C compiler here, GNU gcc is recommended
  CC = gcc
@@ -8,16 +18,16 @@
 +RANLIB = ranlib
  
  # Options for the compiler: A high optimization level is suggested
- CFLAGS = -g -O -Wall -ansi -pedantic # --coverage
+ CFLAGS = -g -O -W -Wall -ansi -pedantic # --coverage
  
--all: libjbig.a tstcodec tstcodec85
+-all: libjbig.a libjbig85.a tstcodec tstcodec85 tstjoint
 +all: cygjbig-2.dll cygjbig85-2.dll libjbig.a libjbig85.a tstcodec tstcodec85
  
  tstcodec: tstcodec.o jbig.o jbig_ar.o
- 	$(CC) $(CFLAGS) -o tstcodec $+
-@@ -15,15 +17,21 @@ tstcodec: tstcodec.o jbig.o jbig_ar.o
- tstcodec85: tstcodec85.o jbig85.o jbig_ar.o
- 	$(CC) $(CFLAGS) -o tstcodec85 $+
+ 	$(CC) $(LDFLAGS) $(CFLAGS) -o tstcodec tstcodec.o jbig.o jbig_ar.o
+@@ -18,15 +20,21 @@ tstjoint: tstjoint.o jbig.o jbig85.o jbig_ar.o
+ 	$(CC) $(LDFLAGS) $(CFLAGS) -o tstjoint \
+ 	  tstjoint.o jbig.o jbig85.o jbig_ar.o
  
 +cygjbig-2.dll: jbig.o jbig_ar.o
 +	$(CC) -shared -Wl,--out-implib,libjbig.dll.a -o $@ $^

@@ -1,6 +1,6 @@
 NAME="jbigkit"
-VERSION=2.0
-RELEASE=15
+VERSION=2.1
+RELEASE=1
 CATEGORY="Graphics"
 SUMMARY="JBIG1 codec"
 DESCRIPTION="JBIG-KIT is a software implementation of the JBIG1 data compression
@@ -11,16 +11,27 @@ document management systems. The package includes a variant implementation of
 just the ITU-T T.85 profile, with memory management optimized for embedded and
 fax applications."
 HOMEPAGE="https://www.cl.cam.ac.uk/~mgk25/jbigkit/"
+# The upstream git repository is https://www.cl.cam.ac.uk/~mgk25/git/jbigkit
 SRC_URI="https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/jbigkit-${VERSION}.tar.gz"
-SRC_DIR="jbigkit"
-PATCH_URI="
-	https://src.fedoraproject.org/rpms/jbigkit/raw/f33/f/jbigkit-2.0-warnings.patch
-	https://src.fedoraproject.org/rpms/jbigkit/raw/f33/f/jbigkit-CVE-2013-6369.patch
-	https://src.fedoraproject.org/rpms/jbigkit/raw/f33/f/jbigkit-covscan.patch
-	2.0-build.patch
-	2.0-parallel-make.patch
+SRC_DIR="jbigkit-${VERSION}"
+
+################################
+## Patch files
+################################
+# Patch filenames are in a default style of 'git format-patch'
+PATCH_URI=$(\
+  find -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*.patch' \
+  | sort \
+)
+# Additional patches, if any
+PATCH_URI+="
+  2.1p14-warnings.patch
+  2.1p14-build.patch
 "
 
+################################
+## Packages
+################################
 PKG_NAMES="${NAME} libjbig2 libjbig-devel"
 jbigkit_SUMMARY="Converts JBIG1 to/from PBM format"
 jbigkit_CONTENTS="usr/bin/*.exe usr/share/doc/ usr/share/man/"
@@ -28,6 +39,8 @@ libjbig2_CATEGORY="Libs"
 libjbig2_CONTENTS="usr/bin/cygjbig*-2.dll"
 libjbig_devel_CATEGORY="Libs"
 libjbig_devel_CONTENTS="usr/include/ usr/lib/"
+
+MAKEOPTS="-j1"
 
 src_compile() {
 	lndirs
