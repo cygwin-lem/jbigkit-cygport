@@ -31,7 +31,8 @@ libjbig_devel_CONTENTS="usr/include/ usr/lib/"
 src_compile() {
 	lndirs
 	cd ${B}
-	cygmake CC=${CC} CCFLAGS="${CFLAGS}" AR=${AR} RANLIB=${RANLIB}
+	CPPFLAGS="-I../libjbig" LDFLAGS="-L../libjbig" \
+	  cygmake CC=${CC} CFLAGS="${CFLAGS}" AR=${AR} RANLIB=${RANLIB}
 }
 
 src_test() {
