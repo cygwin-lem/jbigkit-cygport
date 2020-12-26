@@ -57,7 +57,7 @@ src_test() {
 
 src_install() {
 	cd ${B}
-	dobin libjbig/cygjbig{,85}-2.dll pbmtools/{jbgtopbm,pbmtojbg}.exe
+	dobin libjbig/cygjbig{,85}-2.dll pbmtools/{jbgtopbm,pbmtojbg}{,85}.exe
 	dolib libjbig/libjbig{,85}.dll.a
 	doinclude libjbig/jbig{,85,_ar}.h
 	doman pbmtools/*.1
